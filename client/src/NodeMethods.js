@@ -44,11 +44,4 @@ Node.prototype.updateTotals = function(tally) {
   }
 };
 
-Node.prototype.makeNew = function() {
-	var root = new Node({name:'total'});
-	root.addCat('mandatory');
-	root.addCat('optional');
-	return root;
-};
-
-export default Node.prototype;
+export default Node;

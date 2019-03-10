@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 
-const monthSchema = mongoose.Schema({
-	month: {
+const budgetSchema = mongoose.Schema({
+	budget: {
 		type: Object,
 		required: true
 	}
 });
 
-module.exports = mongoose.model('months', monthSchema);
+module.exports = mongoose.model('budgets', budgetSchema);

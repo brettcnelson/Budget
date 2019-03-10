@@ -11,25 +11,35 @@ class Home extends React.Component {
   componentDidMount() {
     fetch('/api/entries', {accept:'application/json'})
     .then(res => res.json())
-    .then(data=>{
-      if (data.length) {
-       this.setState({budget:data[0]});
-      }
-      else {
-        this.setState({budget:Node.makeNew()});
-      }
-    })
+    .then(data=> this.setState({budget:data[0]}))
     .catch(err => console.log('ERR:', err));
   }
 
-  saveDB() {
+  makeNew(name) {
+    var root = new Node({name});
+    root.addCat('mandatory');
+    root.addCat('optional');
+    return root;
+  }
+
+  saveDB(name) {
+    var budget = this.state.budget.budget;
+    if (name) {
+      budget.name = name;
+    }
+    (function deleteParent(node) {
+      delete node.parent;
+      for (var key in node.sub) {
+        deleteParent(node.sub[key]);
+      }
+    }(budget));
     var url = 'api/entries';
     var options = {
       headers: {
         'Content-Type': 'application/json'
       },
       method: 'put',
-      body: JSON.stringify(this.state.budget)
+      body: JSON.stringify({budget})
     }
     if (!this.state.budget._id) {
       options.method = 'post';
@@ -39,19 +49,28 @@ class Home extends React.Component {
     }
     fetch(url,options)
     .then(res=>res.json())
-    .then(data=>this.setState({budget:data}));
+    .then(data=>this.setState({budget:data}))
+    .catch(err => console.log('ERR:', err));
   }
 
-  sub(sub,classes='') {
+  renameBudget() {
+    this.saveDB(prompt('change name'));
+  }
+
+  sub(node,classes='') {
     classes += 'sub';
     // var w = sub.spent/sub.limit;
     return (
       <div className={classes}>
-        <div>{sub.name}</div>
-        <div>{sub.spent + ' of ' + sub.limit}</div>
-        <div className="sub">{}</div>
+        <div>{node.name}</div>
+        <div>{node.spent + ' of ' + node.limit}</div>
+        <div className="sub">{Object.values(node.sub||{}).map((n)=>this.sub(n))}</div>
       </div>
     );
+  }
+
+  createBudget() {
+    this.setState({budget:{budget:this.makeNew(prompt('enter a name'))}},()=>this.saveDB());
   }
 
   showState() {
@@ -59,13 +78,11 @@ class Home extends React.Component {
   }
 
   render() {
-    return (
+    return !this.state.budget ? <div onClick={()=>this.createBudget()}>add a budget</div> : (
       <div className="Home">
-        <button onClick={()=>this.showState()}>st</button>
-        <button onClick={()=>this.saveDB()}>save</button>
         <button onClick={()=>this.createBudget()}>create new budget</button>
         <button onClick={()=>this.renameBudget()}>rename budget</button>
-        <div className="list">{this.sub('total ')}</div>
+        <div className="list">{this.sub(this.state.budget.budget)}</div>
       </div>
     );
   }
@@ -73,8 +90,6 @@ class Home extends React.Component {
 
 export default Home;
 
-// var month = prompt('enter month');
-// return fetch('/api/entries',{headers:{'Content-Type':'application/json'},method:'post',body: JSON.stringify({month})})
 
   // api(url,options,stateKey) {
   //   fetch(url, options)

@@ -4,21 +4,21 @@ class List extends React.Component {
 	constructor(props) {
     super(props);
     this.state = {
-      months:[]
+      budgets:[]
     };
   }
 	
   componentDidMount() {
 		fetch('/api/entries', {accept:'application/json'})
 		  .then(res => res.json())
-		  .then(months=>this.setState({months}))
+		  .then(budgets=>this.setState({budgets}))
 		  .catch(err => console.log('ERR:', err));
 	}
 
 	render() {
 		return (
 			<ul>
-				{this.state.months.map((month,i) => <li key={i}>{month.month}</li>)}
+				{this.state.budgets.map((budget,i) => <li key={i}>{budget.budget.name}</li>)}
 			</ul>
 		);
 	}
