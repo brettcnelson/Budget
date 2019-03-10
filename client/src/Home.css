@@ -1,0 +1,38 @@
+.Home {
+	padding:1em;
+	display:grid;
+	grid-template-columns:12.5vw 12.5vw auto;
+	grid-auto-rows:18vh;
+	color:rgba(255, 255, 255, 1);
+	background-color:rgba(0, 0, 0, 1);
+}
+
+.justify {
+	margin:auto;
+}
+
+.left {
+	margin:1em;
+	overflow:scroll;
+}
+
+pre {
+	margin:0;
+}
+
+.crud {
+	font-weight:bold;
+	font-size:4em;
+}
+
+.failing {
+	color:rgba(255, 25, 25, 1);
+}
+
+.passing {
+	color:rgba(25, 255, 25, 1);
+}
+
+.okay {
+	font-size:3em;
+}
