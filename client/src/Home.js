@@ -1,49 +1,80 @@
 import React from 'react';
 import './Home.css';
+import Node from './NodeMethods';
 
 class Home extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      
-    };
+    this.state = {};
   }
 
   componentDidMount() {
     fetch('/api/entries', {accept:'application/json'})
     .then(res => res.json())
     .then(data=>{
-      if (!data.length) {
-        var month = prompt('enter month');
-        return fetch('/api/entries',{headers:{'Content-Type':'application/json'},method:'post',body: JSON.stringify({month})})
+      if (data.length) {
+       this.setState({budget:data[0]});
       }
-     return data;
-    })
-    .then(data=> {
-      console.log(data);
-      this.setState({budget:data});
-      console.log(this.state);
+      else {
+        this.setState({budget:Node.makeNew()});
+      }
     })
     .catch(err => console.log('ERR:', err));
   }
 
-  dropDB() {
-    
+  saveDB() {
+    var url = 'api/entries';
+    var options = {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      method: 'put',
+      body: JSON.stringify(this.state.budget)
+    }
+    if (!this.state.budget._id) {
+      options.method = 'post';
+    }
+    else {
+      url += '/' + this.state.budget._id;
+    }
+    fetch(url,options)
+    .then(res=>res.json())
+    .then(data=>this.setState({budget:data}));
+  }
+
+  sub(sub,classes='') {
+    classes += 'sub';
+    // var w = sub.spent/sub.limit;
+    return (
+      <div className={classes}>
+        <div>{sub.name}</div>
+        <div>{sub.spent + ' of ' + sub.limit}</div>
+        <div className="sub">{}</div>
+      </div>
+    );
+  }
+
+  showState() {
+    console.log(this.state);
   }
 
   render() {
     return (
       <div className="Home">
-        <button onClick={this.dropDB}>start over</button>
-        <div>{this.state.budet}</div>
-        <div></div>
-        <div></div>
+        <button onClick={()=>this.showState()}>st</button>
+        <button onClick={()=>this.saveDB()}>save</button>
+        <button onClick={()=>this.createBudget()}>create new budget</button>
+        <button onClick={()=>this.renameBudget()}>rename budget</button>
+        <div className="list">{this.sub('total ')}</div>
       </div>
     );
   }
 }
 
 export default Home;
+
+// var month = prompt('enter month');
+// return fetch('/api/entries',{headers:{'Content-Type':'application/json'},method:'post',body: JSON.stringify({month})})
 
   // api(url,options,stateKey) {
   //   fetch(url, options)

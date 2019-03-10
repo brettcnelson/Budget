@@ -2,18 +2,8 @@ const mongoose = require('mongoose');
 
 const monthSchema = mongoose.Schema({
 	month: {
-		type: String,
+		type: Object,
 		required: true
-	},
-	limit: {
-		type: Number,
-		default:0
-	},
-	mandatory: {
-		type: Object
-	},
-	optional: {
-		type: Object
 	}
 });
 
