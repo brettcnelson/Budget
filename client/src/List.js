@@ -1,12 +1,27 @@
 import React from 'react';
 
-const List = () => {
-	const nums = [1,2,3,4,5,6,7,8,9];
-	return (
-		<ul>
-			{nums.map((num,i) => <li key={i}>{num}</li>)}
-		</ul>
-	)
+class List extends React.Component {
+	constructor(props) {
+    super(props);
+    this.state = {
+      months:[]
+    };
+  }
+	
+  componentDidMount() {
+		fetch('/api/entries', {accept:'application/json'})
+		  .then(res => res.json())
+		  .then(months=>this.setState({months}))
+		  .catch(err => console.log('ERR:', err));
+	}
+
+	render() {
+		return (
+			<ul>
+				{this.state.months.map((month,i) => <li key={i}>{month.month}</li>)}
+			</ul>
+		);
+	}
 }
 
 export default List;

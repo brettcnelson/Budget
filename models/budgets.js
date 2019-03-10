@@ -1,20 +1,20 @@
 const mongoose = require('mongoose');
 
-const schema = mongoose.Schema({
-	
+const monthSchema = mongoose.Schema({
+	month: {
+		type: String,
+		required: true
+	},
+	limit: {
+		type: Number,
+		default:0
+	},
+	mandatory: {
+		type: Object
+	},
+	optional: {
+		type: Object
+	}
 });
 
-module.exports = mongoose.model('entries', schema);
-
-// database: {
-// 	type: String,
-// 	required: true
-// },
-// dbCollection: {
-// 	type: String,
-// 	required: true
-// },
-// create_date: {
-// 	type: Date,
-// 	default: Date.now()
-// }
+module.exports = mongoose.model('months', monthSchema);

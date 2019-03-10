@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const budgets = require('./models/budgets');
 
-const mongoURI = process.env.NODE_ENV === 'production' ? process.env.MONGO_URI : 'mongodb://localhost/default';
+const mongoURI = process.env.NODE_ENV === 'production' ? process.env.MONGO_URI : 'mongodb://localhost/budget';
 mongoose.connect(mongoURI);
 const db = mongoose.connection;
 

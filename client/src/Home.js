@@ -9,10 +9,35 @@ class Home extends React.Component {
     };
   }
 
+  componentDidMount() {
+    fetch('/api/entries', {accept:'application/json'})
+    .then(res => res.json())
+    .then(data=>{
+      if (!data.length) {
+        var month = prompt('enter month');
+        return fetch('/api/entries',{headers:{'Content-Type':'application/json'},method:'post',body: JSON.stringify({month})})
+      }
+     return data;
+    })
+    .then(data=> {
+      console.log(data);
+      this.setState({budget:data});
+      console.log(this.state);
+    })
+    .catch(err => console.log('ERR:', err));
+  }
+
+  dropDB() {
+    
+  }
+
   render() {
     return (
       <div className="Home">
-        TEST
+        <button onClick={this.dropDB}>start over</button>
+        <div>{this.state.budet}</div>
+        <div></div>
+        <div></div>
       </div>
     );
   }
@@ -20,10 +45,15 @@ class Home extends React.Component {
 
 export default Home;
 
-  // componentDidMount() {
-  //   // check express api proxy feed
-  //   var options = {accept:'application/json'};
-  //   this.api('/api', options, 'api');
+  // api(url,options,stateKey) {
+  //   fetch(url, options)
+  //   .then(res => res.json())
+  //   .then(data => {
+  //     var newState = {};
+  //     newState[stateKey] = data;
+  //     setTimeout(() => this.setState(newState), this.state.delay)
+  //   })
+  //   .catch(err => console.log('ERR:', err));
   // }
 
   // componentDidUpdate(prevProps, prevState) {
@@ -67,13 +97,3 @@ export default Home;
   //   }
   // }
 
-  // api(url,options,stateKey) {
-  //   fetch(url, options)
-  //   .then(res => res.json())
-  //   .then(data => {
-  //     var newState = {};
-  //     newState[stateKey] = data;
-  //     setTimeout(() => this.setState(newState), this.state.delay)
-  //   })
-  //   .catch(err => console.log('ERR:', err));
-  // }
