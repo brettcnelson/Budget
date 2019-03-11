@@ -1,11 +1,11 @@
-function Node(node) {
+function Node(node,parent) {
 	this.name = node.name;
-	this.parent = node.parent || null;
+	this.parent = parent || null;
 	this.limit = node.limit || 0;
 	this.spent = node.spent || 0;
 	this.sub = {};
 	for (var key in node.sub) {
-		this.sub[key] = new Node(node.sub[key]);
+		this.sub[key] = new Node(node.sub[key],this);
 	}
 }
 

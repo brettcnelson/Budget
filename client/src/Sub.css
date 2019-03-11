@@ -1,0 +1,15 @@
+.sub {
+	margin-left:1%;
+	margin-top:10px;
+}
+
+.grid {
+	display:grid;
+	grid-template-columns:1fr 1fr 1fr;
+	grid-gap:2px;
+	border:1px dotted gray;
+}
+
+.graph {
+	border:1px solid black;
+}
