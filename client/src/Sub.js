@@ -3,9 +3,14 @@ import './Sub.css';
 import Trans from './Trans';
 
 const Sub = (props) => {
-	var spent = props.node.spent + props.node.sub.reduce((a,b)=>a+b.spent,0);
-	var limit = props.node.limit + props.node.sub.reduce((a,b)=>a+b.limit,0);
-	var info = '$'+spent+' of '+'$'+limit;
+	var totals = props.node.totals();
+	var info = '$'+totals.spent+' of '+'$'+totals.limit;
+	var styles = {background:'rgb(87, 237, 49)',width:''+(totals.spent*100)/totals.limit+'%'};
+	if (totals.spent/totals.limit>1) {
+		styles.background = 'red';
+		styles.width = '100%';
+	}
+
 
 	function addCat(name) {
 		props.node.addCat(prompt('enter name'),Number(prompt('enter limit'))||0,Number(prompt('enter amount spent'))||0);
@@ -23,24 +28,28 @@ const Sub = (props) => {
 	}
 
 	function changeLimit() {
-		props.node.addTrans(Number(prompt('enter new limit'))||0);
+		props.node.changeLimit(Number(prompt('enter new limit'))||0);
 		props.stateChange();
-
 	}
+
+  function deleteTrans(i) {  	
+  	props.node.deleteTrans(i);
+  	props.stateChange();
+  }
 
 	return (
 		<div className="sub">
 			<div className="grid">
-				<div>{props.node.name}</div><div>{info}</div><div className="graph"><span style={{width:spent/(limit||1),background:'green'}}></span><span></span></div>
+				<div>{props.node.name}</div><div>{'$'+(totals.limit-totals.spent)+' left'}</div><div className="graph"><div className="bar" style={styles}><div className="info">{info}</div></div></div>
 			</div>
 			<div>
-				<Trans trans={props.node.trans} />
+				<Trans trans={props.node.trans} deleteTrans={deleteTrans} />
 				<button onClick={addTrans}>add transaction</button>
 				<button onClick={addCat}>add sub-category</button>
 				<button onClick={changeLimit}>change limit</button>
 				<button onClick={()=>deleteCat(props.index)}>delete category</button>
 			</div>
-			<div>{props.node.sub.map((s,i)=><Sub index={i} key={i} node={s} stateChange={props.stateChange}/>)}</div>
+			<div>{props.node.sub.map((s,i)=><Sub index={i} key={i} node={s} stateChange={props.stateChange} />)}</div>
 		</div>
 	);
 }

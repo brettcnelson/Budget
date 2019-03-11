@@ -1,15 +1,24 @@
 .sub {
-	margin-left:1%;
+	margin-left:2%;
 	margin-top:10px;
+	border-left:1px solid black;
 }
 
 .grid {
 	display:grid;
-	grid-template-columns:1fr 1fr 1fr;
+	grid-template-columns:100px 100px 1fr;
 	grid-gap:2px;
 	border:1px dotted gray;
 }
 
 .graph {
 	border:1px solid black;
+}
+
+.bar {
+	height:100%;
+}
+
+.info {
+	/*overflow:scroll;*/
 }

@@ -1,3 +1,11 @@
 .trans {
-	display:inline-block;
+	background:gray;
+}
+
+.details {
+	display:grid;
+	grid-template-columns:repeat(2,1fr); 
+	background:gray;
+	border:1px solid black;
+	padding:2px;
 }

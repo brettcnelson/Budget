@@ -18,7 +18,7 @@ class Trans extends React.Component {
 		return this.props.trans.length ?
 			(<div className="trans" onClick={()=>this.showHide()}>
 					<div>{this.state.show?'^':'<>'} transactions</div>
-					{this.state.show && this.props.trans.map((t,i)=><div key={i}>{t}</div>)}
+					{this.state.show && this.props.trans.map((t,i)=><div className="details" key={i}><div>{t}</div><button onClick={()=>this.props.deleteTrans(i)}>X</button></div>)}
 				</div>
 			) :
 			null;
