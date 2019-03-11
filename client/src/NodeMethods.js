@@ -3,45 +3,36 @@ function Node(node,parent) {
 	this.parent = parent || null;
 	this.limit = node.limit || 0;
 	this.spent = node.spent || 0;
-	this.sub = {};
-	for (var key in node.sub) {
-		this.sub[key] = new Node(node.sub[key],this);
+	this.trans = node.trans || [];
+	this.sub = [];
+	if (node.sub) {
+		node.sub.forEach(s=>this.sub.push(new Node(s,this)));
 	}
 }
 
 Node.prototype.addCat = function(name,limit,spent) {
-  if (!this.sub[name]) {
-    this.sub[name] = new Node({name,parent:this,limit,spent});
-    this.updateTotals();
+  if (!this.sub.some(s=>s.name===name)) {
+    this.sub.push(new Node({name,limit,spent},this));
+    if (spent) {
+    	this.sub[this.sub.length-1].trans.push(spent);
+    }
   }
 };
 
-Node.prototype.deleteCat = function() {
-  delete this.parent.sub[this.name];
-  this.updateTotals();
+Node.prototype.deleteCat = function(i) {
+	if (this.parent) {
+	  this.parent.sub.splice(i,1);
+	}
 };
 
 Node.prototype.addTrans = function(amt) {
   this.spent += amt;
-  this.updateTotals('spent');
+  this.trans.push(amt);
+  console.log('trans',this.trans);
 };
 
 Node.prototype.changeLimit = function(limit) {
   this.limit = limit;
-  this.updateTotals('limit');
-};
-
-Node.prototype.updateTotals = function(tally) {
-  if (!tally) {
-    this.updateTotals('spent');
-    this.updateTotals('limit');
-  }
-  else {
-    this[tally] = Object.values(this.sub).reduce((a,b)=>a+b[tally],0);
-    if (this.parent) {
-      this.parent.updateTotals(tally);
-    }
-  }
 };
 
 export default Node;

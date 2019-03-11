@@ -20,23 +20,13 @@ class Home extends React.Component {
     .catch(err => console.log('ERR:', err));
   }
 
-  makeNew(name) {
-    var root = new Node({name});
-    root.addCat('mandatory');
-    root.addCat('optional');
-    return root;
-  }
-
-  saveDB(name) {
-    var budget = this.state.budget;
+  saveDB(name,post,budget=this.state.budget) {
     if (name) {
       budget.name = name;
     }
     (function deleteParent(node) {
       delete node.parent;
-      for (var key in node.sub) {
-        deleteParent(node.sub[key]);
-      }
+      node.sub.forEach(deleteParent);
     }(budget));
     var url = 'api/entries';
     var options = {
@@ -46,7 +36,7 @@ class Home extends React.Component {
       method: 'put',
       body: JSON.stringify({budget})
     }
-    if (!this.state._id) {
+    if (post) {
       options.method = 'post';
     }
     else {
@@ -65,7 +55,7 @@ class Home extends React.Component {
   createBudget() {
     var name = prompt('enter a name');
     if (name) {
-      this.setState({budget:this.makeNew(name)},()=>this.saveDB());
+      this.saveDB(null,true,new Node({name}));
     }
   }
 
@@ -82,7 +72,7 @@ class Home extends React.Component {
         <button onClick={()=>this.createBudget()}>create new budget</button>
         <button onClick={()=>this.deleteBudget()}>delete budget</button>
         <button onClick={()=>this.renameBudget()}>rename budget</button>
-        <Sub node={this.state.budget} />
+        <Sub node={this.state.budget} stateChange={()=>this.saveDB()} />
       </div>
     );
   }
