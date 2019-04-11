@@ -4,16 +4,15 @@ import Trans from './Trans';
 
 const Sub = (props) => {
 	var totals = props.node.totals();
-	var info = '$'+totals.spent+' of '+'$'+totals.limit;
-	var styles = {background:'rgb(87, 237, 49)',width:''+(totals.spent*100)/totals.limit+'%'};
-	if (totals.spent/totals.limit>1) {
-		styles.background = 'red';
-		styles.width = '100%';
-	}
+	var styles = totals.spent/totals.limit>1 ? 
+		{background:'red',width:'100%'} : 
+		{background:'rgb(87, 237, 49)',width:`${totals.spent*100/totals.limit||0}%`};
 
-
-	function addCat(name) {
-		props.node.addCat(prompt('enter name'),Number(prompt('enter limit'))||0,Number(prompt('enter amount spent'))||0);
+	function addCat() {
+		var name = prompt('enter name');
+		if (name) {
+			props.node.addCat(name,Number(prompt('enter limit'))||0,Number(prompt('enter amount spent'))||0);
+		}
 		props.stateChange();
 	}
 
@@ -37,10 +36,18 @@ const Sub = (props) => {
   	props.stateChange();
   }
 
+  function money(v) {
+  	return v.toFixed(2);
+  }
+
 	return (
 		<div className="sub">
 			<div className="grid">
-				<div>{props.node.name}</div><div>{'$'+(totals.limit-totals.spent)+' left'}</div><div className="graph"><div className="bar" style={styles}><div className="info">{info}</div></div></div>
+				<div className="cat">{props.node.name}</div>
+				<div className="graph">
+					<div className="bar" style={styles}></div>
+					<div style={{textAlign:'right',display:'inline-block',width:'90%'}}><div className="info">{`$${money(totals.spent)} of $${money(totals.limit)} - $${money(totals.limit-totals.spent)} left`}</div></div>
+				</div>
 			</div>
 			<div>
 				<Trans trans={props.node.trans} deleteTrans={deleteTrans} />

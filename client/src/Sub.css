@@ -6,19 +6,31 @@
 
 .grid {
 	display:grid;
-	grid-template-columns:100px 100px 1fr;
+	grid-template-columns:10em 1fr;
 	grid-gap:2px;
 	border:1px dotted gray;
 }
 
 .graph {
 	border:1px solid black;
+	/*position:relative;*/
 }
 
 .bar {
 	height:100%;
+/*	position:absolute;
+	top:0;
+	left:0;*/
+
+	display:inline-block;
 }
 
 .info {
-	/*overflow:scroll;*/
+/*	position:absolute;
+	top:0;
+	left:0;
+	width:100%;*/
+
+	text-align:right;
+	display:inline-block;
 }

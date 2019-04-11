@@ -1,21 +1,22 @@
 {
-  "name": "react-fullstack-boilerplate",
+  "name": "DIY-budget",
   "version": "1.0.0",
-  "description": "",
+  "description": "diy budget app",
+  "repository": "/",
   "scripts": {
     "start": "concurrently \"cd client/ && npm start\" \"nodemon server.js\"",
     "setup": "cd client/ && npm install && cd .. && npm install && npm start",
     "heroku-postbuild": "cd client/ && npm install --only=dev && npm install && npm run build"
   },
-  "author": "",
+  "author": "bcn",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.2",
     "express": "^4.16.3",
-    "mongoose": "^5.0.10"
+    "mongoose": "^5.5.0"
   },
   "devDependencies": {
     "concurrently": "^3.5.1",
-    "nodemon": "^1.17.2"
+    "nodemon": "^1.18.11"
   }
 }

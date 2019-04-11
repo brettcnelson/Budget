@@ -66,13 +66,12 @@ class Home extends React.Component {
   }
 
   render() {
-    return !this.state.budget ? <div onClick={()=>this.createBudget()}>add a budget   <button>+</button></div> : 
-    (
+    return (
       <div className="Home">
-        <button onClick={()=>this.createBudget()}>create new budget</button>
-        <button onClick={()=>this.deleteBudget()}>delete budget</button>
+        <button onClick={()=>this.createBudget()}>+</button>
         <button onClick={()=>this.renameBudget()}>rename budget</button>
-        <Sub node={this.state.budget} stateChange={()=>this.saveDB()} />
+        <button onClick={()=>this.deleteBudget()}>delete budget</button>
+        {this.state.budget ? <Sub node={this.state.budget} stateChange={()=>this.saveDB()} /> : null}
       </div>
     );
   }
